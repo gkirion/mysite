@@ -21,3 +21,11 @@ class Choice(models.Model):
 	votes = models.IntegerField(default=0)
 	def __str__(self):
 		return self.choice_text
+
+class Human(models.Model):
+	name = models.CharField(max_length=64)
+	surname = models.CharField(max_length=64)
+	height = models.IntegerField(default=0)
+	date_of_birth = models.DateTimeField()
+	def __str__(self):
+		return self.name + " " + self.surname
