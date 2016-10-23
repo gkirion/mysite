@@ -4,7 +4,10 @@ from django.shortcuts import get_object_or_404, render
 from django.views import generic
 from django.urls import reverse
 from django.utils import timezone
-from .models import Choice, Question
+from .models import Choice, Question, Human
+from .forms import NameForm
+from .forms import AutoForm
+from .forms import PurchaseForm
 
 
 class IndexView(generic.ListView):
@@ -42,4 +45,33 @@ def vote(request, question_id):
 		selected_choice.votes += 1
 		selected_choice.save()
 		return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+def humans(request):
+	humans_list = Human.objects.all()
+	template = loader.get_template('polls/humans.html')
+	context = {
+		'humans_list': humans_list,
+	}
+	return HttpResponse(template.render(context, request))
+
+def get_username(request):
+	if request.method == 'POST':
+		form = AutoForm(request.POST)
+		if form.is_valid():
+			username = form.cleaned_data['name']
+			form.save()
+			return HttpResponse('Thank you %s!' % username);
+	else:
+		form = AutoForm()
+	return render(request, 'polls/username.html', {'form': form})
+
+def purchase(request):
+	if request.method == 'POST':
+		form = PurchaseForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return HttpResponse('Have a nice day!')
+	else:
+		form = PurchaseForm()
+	return render(request, 'polls/purchase.html', {'form': form})
 

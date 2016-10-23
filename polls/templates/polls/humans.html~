@@ -1,0 +1,9 @@
+{% if humans_list %}
+	<ul>
+	{% for human in humans_list %}
+		<li>{{human}}</li>
+	{% endfor %}
+	</ul>
+{% else %}
+	<p>no humans here</p>
+{% endif %}

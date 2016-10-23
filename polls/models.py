@@ -22,10 +22,31 @@ class Choice(models.Model):
 	def __str__(self):
 		return self.choice_text
 
+GENDER_CHOICES = (
+	('M', 'Male'),
+	('F', 'Female'),
+)
+
 class Human(models.Model):
 	name = models.CharField(max_length=64)
 	surname = models.CharField(max_length=64)
 	height = models.IntegerField(default=0)
 	date_of_birth = models.DateTimeField()
+	gender = models.CharField(max_length=1, default='M', choices=GENDER_CHOICES)
 	def __str__(self):
 		return self.name + " " + self.surname
+
+class Shoe(models.Model):
+	name = models.CharField(max_length=64)
+	manufacturer = models.CharField(max_length=64)
+	price = models.DecimalField(max_digits=5, decimal_places=2)
+	def __str__(self):
+		return self.name
+
+class Purchase(models.Model):
+	buyer = models.ForeignKey(Human, on_delete=models.CASCADE)
+	item = models.ForeignKey(Shoe, on_delete=models.CASCADE)
+	quantity = models.IntegerField(default=1)
+	date = models.DateTimeField()
+	def __str__(self):
+		return self.buyer.name + " " + self.item.name
